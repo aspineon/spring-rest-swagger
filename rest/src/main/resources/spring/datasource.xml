@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- propertie file location for both windows and linux platforms   -->        
+    <context:property-placeholder location="file:C:\\cms\\etc\\cms.ini,file:/etc/cms/cms.ini"
+                                  ignore-unresolvable="true" 
+                                  ignore-resource-not-found="true" />
+
+    <context:property-placeholder location="classpath:spring/jpa.properties"/>
+
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="poolName" value="springHikariCP" />
+        <property name="dataSourceClassName" value="${cms.jdbc.dataSourceClassName}"/>
+        <property name="connectionTimeout" value="${cms.hikari.connectionTimeout}" />
+        <property name="idleTimeout" value="${cms.hikari.idleTimeout}" />
+        <property name="maxLifetime" value="${cms.hikari.maxLifetime}" />
+        <property name="minimumIdle" value="${cms.hikari.minimumIdle}" />
+        <property name="maximumPoolSize" value="${cms.hikari.maximumPoolSize}" />
+        <property name="initializationFailFast" value="${cms.hikari.initializationFailFast}" />
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="url">${cms.jdbc.url}</prop>
+                <prop key="user">${cms.jdbc.username}</prop>
+                <prop key="password">${cms.jdbc.password}</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig" />
+    </bean>
+</beans>
+

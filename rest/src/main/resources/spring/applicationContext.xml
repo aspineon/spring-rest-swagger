@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:metrics="http://www.ryantenney.com/schema/metrics"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://jax-ws.dev.java.net/spring/core
+                           http://jax-ws.dev.java.net/spring/core.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/data/jpa
+                           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.ryantenney.com/schema/metrics
+                           http://www.ryantenney.com/schema/metrics/metrics.xsd">
+
+    <import resource="datasource.xml"/>
+
+    <!-- Creates a MetricRegistry bean -->
+    <metrics:metric-registry id="metricRegistry" />
+    <metrics:annotation-driven metric-registry="metricRegistry" />
+    <metrics:reporter type="slf4j" metric-registry="metricRegistry" period="10s" />
+        <!-- metrics-jvm related metrics -->
+<!--    <metrics:register metric-registry="metricRegistry">
+        <bean metrics:name="jvm.gc" class="com.codahale.metrics.jvm.GarbageCollectorMetricSet" />
+        <bean metrics:name="jvm.memory" class="com.codahale.metrics.jvm.MemoryUsageGaugeSet" />
+        <bean metrics:name="jvm.thread-states" class="com.codahale.metrics.jvm.ThreadStatesGaugeSet" />
+        <bean metrics:name="jvm.fd.usage" class="com.codahale.metrics.jvm.FileDescriptorRatioGauge" />
+    </metrics:register>-->
+
+    <context:property-placeholder location="classpath:spring/jpa.properties"/>
+
+
+    <context:component-scan base-package="com.infotech.cms.service,
+                                          com.infotech.cms.repository,
+                                          com.infotech.cms.web.aop.logging,
+                                          com.infotech.cms.web.rest,
+                                          com.infotech.cms.web.rest.mapper,
+                                          com.infotech.accounting.repository,
+                                          com.infotech.accounting.service,
+                                          com.infotech.user.repository
+                                          com.infotech.user.service
+                                          com.infotech.util" />
+
+    <tx:annotation-driven />
+
+
+    <aop:aspectj-autoproxy />
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="com.infotech.user.domain,
+                                               com.infotech.accounting.domain,
+                                               com.infotech.cms.domain" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="${cms.hibernate.show_sql}" />
+                <property name="databasePlatform" value="${cms.hibernate.dialect}" />
+            </bean>
+        </property>
+       <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>      
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <jpa:repositories base-package="com.infotech.cms.repository.springdatajpa"/>
+    <jpa:repositories base-package="com.infotech.user.repository.springdatajpa"/>
+    <jpa:repositories base-package="com.infotech.accounting.repository.springdatajpa"/>
+
+
+
+</beans>
+

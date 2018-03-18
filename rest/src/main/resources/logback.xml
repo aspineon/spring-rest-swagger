@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <if condition='property("os.name").toLowerCase().contains("win")'>
+            <then>
+                <file>C:/cms/log/cms.log</file>
+            </then>
+            <else>
+                <file>/var/log/cms.log</file>
+            </else>
+        </if>       
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>cms.%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>2</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>100MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p [%c{1}] - %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="auditDailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <if condition='property("os.name").toLowerCase().contains("win")'>
+            <then>
+                <file>C:/cms/log/cms.audit.log</file>
+            </then>
+            <else>
+                <file>/var/log/cms.audit.log</file>
+            </else>
+        </if>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <if condition='property("os.name").toLowerCase().contains("win")'>
+                <then>
+                    <FileNamePattern>C:/cms/log/cms.audit.%d{yyyy-MM-dd}.log</FileNamePattern>
+                </then>
+                <else>
+                    <FileNamePattern>/var/log/cms.audit.%d{yyyy-MM-dd}.log</FileNamePattern>
+                </else>
+            </if>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} - %m%n</Pattern>
+        </encoder>      
+    </appender>
+    <appender name="profileDailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <if condition='property("os.name").toLowerCase().contains("win")'>
+            <then>
+                <file>C:/cms/log/cms.profile.log</file>
+            </then>
+            <else>
+                <file>/var/log/cms.profile.log</file>
+            </else>
+        </if>       
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <if condition='property("os.name").toLowerCase().contains("win")'>
+                <then>
+                    <FileNamePattern>C:/cms/log/cms.profile.%d{yyyy-MM-dd}.log</FileNamePattern>
+                </then>
+                <else>
+                    <FileNamePattern>/var/log/cms.profile.%d{yyyy-MM-dd}.log</FileNamePattern>
+                </else>
+            </if>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} - %m%n</Pattern>
+        </encoder>      
+    </appender>
+ 
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="rollingFileAppender" />
+    </root>
+    <logger name="audit" >
+        <level value="INFO" />
+        <appender-ref ref="auditDailyRollingFileAppender"/>
+    </logger>
+    <logger name="profiler" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="profileDailyRollingFileAppender"/>
+    </logger>
+
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+    <logger name="com.infotech" level="DEBUG"/>
+
+</configuration>

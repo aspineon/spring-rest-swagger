@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+
+   <!-- <bean id="auditService" name="auditService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cmsrvice.AuditService"/>
+    </bean>-->
+    <bean id="userService" name="userService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.user.service.UserService"/>
+    </bean>
+    <bean id="roleService" name="roleService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.user.service.RoleService"/>
+    </bean>
+  <!--  <bean id="permissionService" name="permissionService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cmsrvice.PermissionService"/>
+    </bean>-->
+    <bean id="UserService" name="UserService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="org.springframework.security.core.userdetails.UserDetailsService"/>
+    </bean>
+
+    <bean id="roleRepository" name="roleRepository" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.user.repository.RoleRepository"/>
+    </bean>
+
+    <bean id="cardService" name="cardService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.service.CardService"/>
+    </bean>
+
+    <bean id="CardRepository" name="CardRepository" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.repository.CardRepository"/>
+    </bean>
+    <bean id="cardHolderService" name="cardHolderService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.service.CardHolderService"/>
+    </bean>
+
+    <bean id="CardHolderRepository" name="CardHolderRepository" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.repository.CardHolderRepository"/>
+    </bean>
+
+    <bean id="panSequenceService" name="panSequenceService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.service.PanSequenceService"/>
+    </bean>
+    <bean id="PanSequenceRepository" name="PanSequenceRepository" class="org.mockito.Mockito" factory-method="mock">
+            <constructor-arg value="com.infotech.cms.repository.PanSequenceRepository"/>
+    </bean>
+
+    <bean id="cardTypeService" name="cardTypeService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.service.CardTypeService"/>
+    </bean>
+
+    <bean id="CardTypeRepository" name="CardTypeRepository" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.repository.CardTypeRepository"/>
+    </bean>
+
+    <bean id="cardHolderTypeService" name="cardHolderTypeService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.service.CardHolderTypeService"/>
+    </bean>
+
+    <bean id="CardHolderTypeRepository" name="CardHolderTypeRepository" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.cms.repository.CardHolderTypeRepository"/>
+    </bean>
+
+    <bean id="AccountTypeRepository" name="AccountTypeRepository" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="com.infotech.accounting.repository.AccountTypeRepository"/>
+    </bean>
+
+    <!-- -->
+
+    <bean id="validator" name="validator" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    </bean>
+
+    <!--  required for thymeleaf security dialect expression, spring security is bypassed -->
+    <bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+    </bean>
+
+</beans>

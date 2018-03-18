@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://jax-ws.dev.java.net/spring/core
+                           http://jax-ws.dev.java.net/spring/core.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/data/jpa
+                           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <import resource="datasource.xml"/>
+
+    <context:component-scan base-package="com.infotech.cms.service,
+                                          com.infotech.cms.repository,
+                                          com.infotech.accounting.repository,
+                                          com.infotech.accounting.service,
+                                          com.infotech.user.repository
+                                          com.infotech.user.service
+                                          com.infotech.util"/>
+
+    <tx:annotation-driven/>
+
+    <aop:aspectj-autoproxy/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.infotech.cms.domain,
+                                               ,com.infotech.user.domain
+                                               ,com.infotech.accounting.domain,"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                <prop key="javax.persistence.schema-generation.scripts.action">create</prop>
+                <prop key="javax.persistence.schema-generation.scripts.create-target">cms-schema</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <jpa:repositories base-package="com.infotech.cms.repository.springdatajpa"/>
+    <jpa:repositories base-package="com.infotech.user.repository.springdatajpa"/>
+    <jpa:repositories base-package="com.infotech.accounting.repository.springdatajpa"/>
+
+    <bean id="springSecurityAuditorAware" class=" com.infotech.user.security.SpringSecurityAuditorAware"/>
+    <jpa:auditing auditor-aware-ref="springSecurityAuditorAware"/>
+</beans>
+
